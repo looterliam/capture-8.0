@@ -1,7 +1,7 @@
 document.getElementById('capture').addEventListener('click', () => {
-    chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         chrome.scripting.executeScript({
-            target: {tabId: tabs[0].id},
+            target: { tabId: tabs[0].id },
             files: ['content.js']
         });
     });
