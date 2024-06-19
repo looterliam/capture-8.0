@@ -38,3 +38,40 @@ script.onload = () => {
 };
 
 document.head.appendChild(script);
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+    if (message.action === 'process-image') {
+        const { dataUrl, rect } = message;
+        const croppedImage = await cropImage(dataUrl, rect);
+        const text = await performOCR(croppedImage);
+        chrome.runtime.sendMessage({ action: 'ocr-result', text });
+    }
+});
+
+async function performOCR(imageData) {
+    const worker = Tesseract.createWorker();
+    await worker.load();
+    await worker.loadLanguage('eng');
+    await worker.initialize('eng');
+
+    const { data: { text } } = await worker.recognize(imageData);
+    await worker.terminate();
+    return text;
+}
+
+async function cropImage(imageData, rect) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.src = imageData;
+
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
+            ctx.drawImage(img, rect.left, rect.top, rect.width, rect.height, 0, 0, rect.width, rect.height);
+            resolve(canvas.toDataURL('image/png'));
+        };
+    });
+}
+
