@@ -38,6 +38,7 @@ script.onload = () => {
 };
 
 document.head.appendChild(script);
+
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (message.action === 'process-image') {
         const { dataUrl, rect } = message;
@@ -74,4 +75,3 @@ async function cropImage(imageData, rect) {
         };
     });
 }
-
