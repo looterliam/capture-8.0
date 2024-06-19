@@ -1,6 +1,8 @@
-// Load Tesseract.js dynamically in content script
+// Load Tesseract.js from the local libs folder
 const script = document.createElement('script');
-script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@2.1.1/dist/tesseract.min.js';
+script.src = chrome.runtime.getURL('libs/tesseract.min.js');
+document.head.appendChild(script);
+
 script.onload = () => {
     document.addEventListener('mousedown', startSelection);
 
@@ -36,8 +38,6 @@ script.onload = () => {
         }
     }
 };
-
-document.head.appendChild(script);
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (message.action === 'process-image') {
