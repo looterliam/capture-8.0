@@ -22,7 +22,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["icons/*"],
+      "resources": ["icons/*", "libs/tesseract.min.js"],
       "matches": ["<all_urls>"]
     }
   ]
