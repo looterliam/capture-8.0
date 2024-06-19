@@ -1,3 +1,5 @@
+importScripts('libs/tesseract.min.js');
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'capture') {
         chrome.tabs.captureVisibleTab(null, {format: 'png'}, (dataUrl) => {
